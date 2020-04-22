@@ -1,16 +1,17 @@
 import * as core from '@actions/core'
-import {wait} from './wait'
+import * as github from '@actions/github'
+import * as Message from './message-retrieve'
 
-async function run(): Promise<void> {
+async function run(): Promise<any> {
+  const payload = github.context.payload
+  const branch = payload.pull_request.head.ref
+  const repoName = payload.repository.name
+  const repo = payload.repository.git_url
   try {
-    const ms: string = core.getInput('milliseconds')
-    core.debug(`Waiting ${ms} milliseconds ...`)
-
-    core.debug(new Date().toTimeString())
-    await wait(parseInt(ms, 10))
-    core.debug(new Date().toTimeString())
-
-    core.setOutput('time', new Date().toTimeString())
+    if (branch && repo) {
+      const message = new Message.MessageRetrieved(branch, repoName, repo)
+      return message.run()
+    }
   } catch (error) {
     core.setFailed(error.message)
   }

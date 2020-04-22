@@ -1,10 +1,9 @@
-name: 'Your name here'
-description: 'Provide a description here'
-author: 'Your name or organization here'
+name: 'get-commit-message-from-pr-action'
+description: 'Retrieve last commit message from a pr'
+author: 'atlwendy'
 inputs:
-  myInput:              # change this
-    description: 'input description here'
-    default: 'default value if applicable'
+  githubObject:
+    description: 'github object'
 runs:
   using: 'node12'
   main: 'dist/index.js'
