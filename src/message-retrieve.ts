@@ -12,7 +12,7 @@ export class MessageRetrieved {
     this.repository = gitUrl
   }
 
-  async run(): Promise<any> {
+  async execute(): Promise<void> {
     const clone = `git clone -b ${this.branch} ${this.repository}`
     const gitDir = `./${this.repoName}/.git`
     const commit = `git --no-pager --git-dir=${gitDir} log -1 --pretty=format:"%s"`
@@ -22,7 +22,7 @@ export class MessageRetrieved {
         let myOutput = ''
         let myError = ''
 
-        let options: Record<string, any> = {}
+        let options: Record<string, object> = {}
         options.listeners = {
           stdout: (data: Buffer) => {
             myOutput += data.toString()
@@ -35,9 +35,10 @@ export class MessageRetrieved {
         exec
           .exec(commit, [], options)
           .then(_ => {
-            const match = myOutput.match(/skip ci|ci skip/) ? 'false' : 'true'
-            console.log('myOutput: ', myOutput)
-            core.setOutput('match', match)
+            const match = /skip ci|ci skip/.test(myOutput)
+            const shouldRun = (!match).toString()
+            console.log('match: ', match)
+            core.setOutput('shouldRun', shouldRun)
           })
           .catch(e => {
             console.warn('Error in git log command: ', e)

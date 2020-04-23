@@ -10,7 +10,7 @@ async function run(): Promise<any> {
   try {
     if (branch && repo) {
       const message = new Message.MessageRetrieved(branch, repoName, repo)
-      return message.run()
+      return message.execute()
     }
   } catch (error) {
     core.setFailed(error.message)
