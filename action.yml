@@ -1,4 +1,4 @@
-name: 'check-commit-message-from-pr-action'
+name: 'Check Last Commit Message of a Pull Request'
 description: 'Check last commit message from a pull request'
 author: 'atlwendy'
 outputs:
