@@ -1,10 +1,12 @@
 name: 'check-commit-message-from-pr-action'
 description: 'Check last commit message from a pull request'
 author: 'atlwendy'
-icon: 'git-pull-request'
-inputs:
-  githubObject:
-    description: 'github object'
+outputs:
+  shouldRun:
+    description: 'if last commit message contains "skip ci" or "ci skip" value is "false"' 
 runs:
   using: 'node12'
   main: 'dist/index.js'
+branding:
+  icon: 'git-pull-request'
+  color: 'red'
