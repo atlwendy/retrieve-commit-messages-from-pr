@@ -16,7 +16,7 @@ jobs:
     steps:
       - name: skip or not
         id: skipornot
-        uses: atlwendy/retrieve-commit-messages-from-pr@v1
+        uses: atlwendy/retrieve-commit-messages-from-pr@v2
       - name: get my action output
         run: echo ::set-env name=SHOULD_RUN::${{ steps.skipornot.outputs.shouldRun }}
       - name: build
