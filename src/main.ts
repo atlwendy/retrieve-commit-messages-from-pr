@@ -4,12 +4,18 @@ import * as Message from './message-retrieve'
 
 async function run(): Promise<any> {
   const payload = github.context.payload
+  const token = core.getInput('token')
   const branch = payload.pull_request.head.ref
   const repoName = payload.repository.name
-  const repo = payload.repository.git_url
+  const repo = payload.repository.clone_url
   try {
     if (branch && repo) {
-      const message = new Message.MessageRetrieved(branch, repoName, repo)
+      const message = new Message.MessageRetrieved(
+        branch,
+        repoName,
+        repo,
+        token
+      )
       return message.execute()
     }
   } catch (error) {

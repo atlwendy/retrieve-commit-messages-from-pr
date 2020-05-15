@@ -5,15 +5,23 @@ export class MessageRetrieved {
   branch: string
   repoName: string
   repository: string
+  token: string
 
-  constructor(branch: string, repoName: string, gitUrl: string) {
+  constructor(branch: string, repoName: string, gitUrl: string, token: string) {
     this.branch = branch
     this.repoName = repoName
     this.repository = gitUrl
+    this.token = token
   }
 
   async execute(): Promise<void> {
-    const clone = `git clone -b ${this.branch} ${this.repository}`
+    const extra = '@'
+    const cloneUrlWithToken =
+      this.repository.slice(0, 8) +
+      this.token +
+      extra +
+      this.repository.slice(8)
+    const clone = `git clone -b ${this.branch} ${cloneUrlWithToken}`
     const gitDir = `./${this.repoName}/.git`
     const commit = `git --no-pager --git-dir=${gitDir} log -1 --pretty=format:"%s"`
     exec
@@ -29,7 +37,7 @@ export class MessageRetrieved {
           },
           stderr: (data: Buffer) => {
             myError += data.toString()
-            console.warn('Error in stderr: ', myError)
+            core.warning('Error in stderr: ${myError}')
           }
         }
         exec
@@ -41,11 +49,11 @@ export class MessageRetrieved {
             core.setOutput('shouldRun', shouldRun)
           })
           .catch(e => {
-            console.warn('Error in git log command: ', e)
+            core.warning('Error in git log command: ${e}')
           })
       })
       .catch(e => {
-        console.warn('Error in git clone repo: ', e)
+        core.warning('Error in git clone repo: ${e}')
       })
   }
 }

@@ -16,6 +16,8 @@ jobs:
     steps:
       - name: skip or not
         id: skipornot
+        with:
+          token: ${{ secrets.personalAccessToken }}
         uses: atlwendy/retrieve-commit-messages-from-pr@v2
       - name: get my action output
         run: echo ::set-env name=SHOULD_RUN::${{ steps.skipornot.outputs.shouldRun }}
@@ -25,7 +27,7 @@ jobs:
 
 ```
 
-This action does not need any inputs as it uses github context payload to parse the related branch and repo. It returns an object with key `shouldRun` and value being a string of boolean.
+If the repo is a public accessible repo, you don't need to provide any input. However, if it's a private repo, you'd need to provide a personal access token as input. `GITHUB_TOKEN` is not the correct token. It returns an object with key `shouldRun` and value being a string of boolean.
 
 If last commit messages in a pr contains `skip ci` or `ci skip`, it returns:
 ```
