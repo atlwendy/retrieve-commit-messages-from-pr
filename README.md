@@ -18,7 +18,7 @@ jobs:
         id: skipornot
         with:
           token: ${{ secrets.personalAccessToken }}
-        uses: atlwendy/retrieve-commit-messages-from-pr@v2
+        uses: atlwendy/retrieve-commit-messages-from-pr@v3
       - name: get my action output
         run: echo ::set-env name=SHOULD_RUN::${{ steps.skipornot.outputs.shouldRun }}
       - name: build
