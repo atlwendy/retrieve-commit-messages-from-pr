@@ -21,7 +21,7 @@ export class MessageRetrieved {
       this.token +
       extra +
       this.repository.slice(8)
-    const clone = `git clone -b ${this.branch} ${cloneUrlWithToken}`
+    const clone = `git clone -b ${this.branch} --depth 1 --filter=tree:0 --no-checkout ${cloneUrlWithToken}`
     const gitDir = `./${this.repoName}/.git`
     const commit = `git --no-pager --git-dir=${gitDir} log -1 --pretty=format:"%s"`
     exec
