@@ -18,7 +18,7 @@ jobs:
         id: skipornot
         with:
           token: ${{ secrets.personalAccessToken }}
-        uses: atlwendy/retrieve-commit-messages-from-pr@v3
+        uses: atlwendy/retrieve-commit-messages-from-pr@v4
       - name: get my action output
         run: echo ::set-env name=SHOULD_RUN::${{ steps.skipornot.outputs.shouldRun }}
       - name: build
@@ -34,3 +34,42 @@ If last commit messages in a pr contains `skip ci` or `ci skip`, it returns:
 { shouldRun: 'false' }
 ```
 This return value can then be assigned to an environment variable and used as condition for following steps.
+
+## Extra - cancel the whole workflow
+
+Perfect cooperation with [andymckay/cancel-action](https://github.com/andymckay/cancel-action).
+
+```
+name: Build & Test
+
+on: push
+
+jobs:
+  skip-or-not:
+    name: skip or not
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: skip or not
+      id: skipornot
+      uses: atlwendy/retrieve-commit-messages-from-pr@v4
+    - name: output skip or not
+      run: echo ::set-env name=SHOULD_RUN::${{ steps.skipornot.outputs.shouldRun }}
+    - name: cancelling
+      uses: andymckay/cancel-action@0.2
+      if: env.SHOULD_RUN == 'false'
+    
+  build-and-test:   # that job would be skipped
+    name: build & test
+    runs-on: ubuntu-latest
+    needs: [skip-or-not]    # wait for skip-or-not
+
+    steps:    
+    - uses: actions/checkout@v1
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 3.1.201
+    - name: Build sln
+      run: dotnet build -c Release
+```
