@@ -980,6 +980,7 @@ function run() {
         const repoName = userWithRepo.split('/')[1];
         const branch = ref.replace('refs/heads/', '');
         const repoUrl = `https://github.com/${userWithRepo}.git`;
+        console.log('process.env, branch, repoName, repoUrl: ', process.env, branch, repoName, repoUrl);
         try {
             if (branch && repoUrl) {
                 const message = new Message.MessageRetrieved(branch, repoName, repoUrl, token);
