@@ -13,7 +13,7 @@ export class MessageRetrieved {
     repoName: string,
     gitUrl: string,
     token: string,
-    input: string
+    input?: string
   ) {
     this.branch = branch
     this.repoName = repoName
