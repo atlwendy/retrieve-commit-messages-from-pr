@@ -6,12 +6,20 @@ export class MessageRetrieved {
   repoName: string
   repository: string
   token: string
+  input?: string
 
-  constructor(branch: string, repoName: string, gitUrl: string, token: string) {
+  constructor(
+    branch: string,
+    repoName: string,
+    gitUrl: string,
+    token: string,
+    input?: string
+  ) {
     this.branch = branch
     this.repoName = repoName
     this.repository = gitUrl
     this.token = token
+    this.input = input
   }
 
   async execute(): Promise<void> {
@@ -43,7 +51,11 @@ export class MessageRetrieved {
         exec
           .exec(commit, [], options)
           .then(_ => {
-            const match = /skip ci|ci skip/.test(myOutput)
+            const regEx = new RegExp(this.input, 'g')
+            const match =
+              this.input.length > 0
+                ? myOutput.match(regEx)
+                : /skip ci|ci skip/.test(myOutput)
             const shouldRun = (!match).toString()
             console.log('match: ', match)
             core.setOutput('shouldRun', shouldRun)

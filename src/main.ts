@@ -8,13 +8,15 @@ async function run(): Promise<any> {
   const branch = payload.pull_request.head.ref
   const repoName = payload.repository.name
   const repo = payload.repository.clone_url
+  const input = core.getInput('input')
   try {
     if (branch && repo) {
       const message = new Message.MessageRetrieved(
         branch,
         repoName,
         repo,
-        token
+        token,
+        input
       )
       return message.execute()
     }

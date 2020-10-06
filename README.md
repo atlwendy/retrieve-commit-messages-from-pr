@@ -1,6 +1,6 @@
 # Check Last Commit Message in a Pull Request
 
-This GitHub action returns `{ shouldRun: true }` if last commit message in a pr contains `skip ci` or `ci skip`.
+This GitHub action returns `{ shouldRun: true }` if last commit message in a pr contains `skip ci` or `ci skip` or a custom input.
 
 ## Usage
 
@@ -29,7 +29,7 @@ jobs:
 
 If the repo is a public accessible repo, you don't need to provide any input. However, if it's a private repo, you'd need to provide a personal access token as input. `GITHUB_TOKEN` is not the correct token. It returns an object with key `shouldRun` and value being a string of boolean.
 
-If last commit messages in a pr contains `skip ci` or `ci skip`, it returns:
+If last commit messages in a pr contains `skip ci` or `ci skip` or a custom input, it returns:
 ```
 { shouldRun: 'false' }
 ```
